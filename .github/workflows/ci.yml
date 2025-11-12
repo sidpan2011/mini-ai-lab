@@ -42,15 +42,15 @@ jobs:
         working-directory: backend
         run: |
           npx prisma generate
-          
+          npx prisma migrate deploy
         env:
-          DATABASE_URL: file:./prisma/test.db
+          DATABASE_URL: file:./test.db
 
       - name: Run backend tests
         working-directory: backend
         run: npm test
         env:
-          DATABASE_URL: file:./prisma/test.db
+          DATABASE_URL: file:./test.db
           JWT_SECRET: test-secret-key-for-ci
 
       - name: Upload backend coverage
@@ -136,7 +136,7 @@ jobs:
           npx prisma generate
           npx prisma migrate deploy
         env:
-          DATABASE_URL: file:./prisma/test.db
+          DATABASE_URL: file:./test.db
 
       - name: Start backend server
         working-directory: backend
@@ -144,7 +144,7 @@ jobs:
           npm run dev &
           npx wait-on http://localhost:4000 --timeout 60000
         env:
-          DATABASE_URL: file:./prisma/test.db
+          DATABASE_URL: file:./test.db
           JWT_SECRET: test-secret-key
           PORT: 4000
           DISABLE_MODEL_OVERLOAD: true
