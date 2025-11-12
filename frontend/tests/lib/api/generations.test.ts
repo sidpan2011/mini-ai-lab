@@ -2,10 +2,13 @@ import { GenerationsApi } from "@/lib/api/generations";
 import { CreateGenerationResponse, Generation } from "@/lib/types/generation";
 
 describe("GenerationsApi", () => {
+  let mockFetch: jest.Mock;
+
   beforeEach(() => {
     localStorage.clear();
     localStorage.setItem("token", "mock-token");
-    global.fetch = jest.fn();
+    mockFetch = jest.fn();
+    global.fetch = mockFetch as any;
   });
 
   afterEach(() => {
@@ -23,7 +26,7 @@ describe("GenerationsApi", () => {
         status: "completed",
       };
 
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      mockFetch.mockResolvedValueOnce({
         ok: true,
         json: async () => mockResponse,
       });
@@ -37,7 +40,7 @@ describe("GenerationsApi", () => {
 
       const result = await GenerationsApi.create(request);
 
-      expect(global.fetch).toHaveBeenCalledWith(
+      expect(mockFetch).toHaveBeenCalledWith(
         "http://localhost:4000/api/generations",
         expect.objectContaining({
           method: "POST",
@@ -52,7 +55,7 @@ describe("GenerationsApi", () => {
     });
 
     it("should throw Model overloaded error on 503 status", async () => {
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      mockFetch.mockResolvedValueOnce({
         ok: false,
         status: 503,
         json: async () => ({ message: "Model overloaded" }),
@@ -71,7 +74,7 @@ describe("GenerationsApi", () => {
     });
 
     it("should throw generic error on other failures", async () => {
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      mockFetch.mockResolvedValueOnce({
         ok: false,
         status: 400,
         json: async () => ({ error: "Invalid image format" }),
@@ -100,7 +103,7 @@ describe("GenerationsApi", () => {
         status: "completed",
       };
 
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      mockFetch.mockResolvedValueOnce({
         ok: true,
         json: async () => mockResponse,
       });
@@ -114,7 +117,7 @@ describe("GenerationsApi", () => {
 
       await GenerationsApi.create(request, abortController.signal);
 
-      expect(global.fetch).toHaveBeenCalledWith(
+      expect(mockFetch).toHaveBeenCalledWith(
         "http://localhost:4000/api/generations",
         expect.objectContaining({
           signal: abortController.signal,
@@ -144,14 +147,14 @@ describe("GenerationsApi", () => {
         },
       ];
 
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      mockFetch.mockResolvedValueOnce({
         ok: true,
         json: async () => mockGenerations,
       });
 
       const result = await GenerationsApi.getGenerations();
 
-      expect(global.fetch).toHaveBeenCalledWith(
+      expect(mockFetch).toHaveBeenCalledWith(
         "http://localhost:4000/api/generations?limit=5",
         expect.objectContaining({
           headers: {
@@ -166,14 +169,14 @@ describe("GenerationsApi", () => {
     it("should fetch generations with custom limit", async () => {
       const mockGenerations: Generation[] = [];
 
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      mockFetch.mockResolvedValueOnce({
         ok: true,
         json: async () => mockGenerations,
       });
 
       await GenerationsApi.getGenerations(10);
 
-      expect(global.fetch).toHaveBeenCalledWith(
+      expect(mockFetch).toHaveBeenCalledWith(
         "http://localhost:4000/api/generations?limit=10",
         expect.objectContaining({
           headers: {
@@ -184,7 +187,7 @@ describe("GenerationsApi", () => {
     });
 
     it("should throw error on failed fetch", async () => {
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      mockFetch.mockResolvedValueOnce({
         ok: false,
         json: async () => ({ error: "Unauthorized" }),
       });
