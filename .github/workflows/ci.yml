@@ -40,7 +40,9 @@ jobs:
 
       - name: Setup database
         working-directory: backend
-        run: npx prisma generate
+        run: |
+          npx prisma generate
+          
         env:
           DATABASE_URL: file:./prisma/test.db
 
