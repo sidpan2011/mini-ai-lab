@@ -7,21 +7,25 @@ For complete documentation including setup instructions, API endpoints, and full
 ## Quick Start
 
 1. Install dependencies:
+
 ```bash
 npm install
 ```
 
 2. Set up environment variables:
+
 ```bash
 cp .env.example .env.local
 ```
 
 Configure `.env.local`:
+
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:4000
 ```
 
 3. Run development server:
+
 ```bash
 npm run dev
 ```

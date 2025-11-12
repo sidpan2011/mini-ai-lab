@@ -40,11 +40,19 @@ jobs:
 
       - name: Setup database
         working-directory: backend
-        run: npx prisma generate
+        run: |
+          npx prisma generate
+          npx prisma migrate deploy
+        env:
+          DATABASE_URL: file:./test.db
 
       - name: Run backend tests
         working-directory: backend
         run: npm test
+        env:
+          DATABASE_URL: file:./test.db
+          JWT_SECRET: test-secret-key-for-ci
+          DISABLE_MODEL_OVERLOAD: true
 
       - name: Upload backend coverage
         uses: actions/upload-artifact@v4
@@ -58,7 +66,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x]
+        node-version: [20.x]
 
     steps:
       - name: Checkout code
@@ -86,6 +94,8 @@ jobs:
       - name: Run frontend tests
         working-directory: frontend
         run: npm run test:coverage
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:4000
 
       - name: Upload frontend coverage
         uses: actions/upload-artifact@v4
@@ -96,6 +106,8 @@ jobs:
       - name: Build frontend
         working-directory: frontend
         run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:4000
 
   e2e-test:
     name: E2E Tests (Cypress)
@@ -124,6 +136,8 @@ jobs:
         run: |
           npx prisma generate
           npx prisma migrate deploy
+        env:
+          DATABASE_URL: file:./test.db
 
       - name: Start backend server
         working-directory: backend

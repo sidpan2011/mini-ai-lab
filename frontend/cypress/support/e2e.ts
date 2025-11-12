@@ -4,18 +4,10 @@
 
 import "@testing-library/cypress/add-commands";
 import "cypress-file-upload";
+import "./index.d.ts";
 
 // Prevent TypeScript errors
 export {};
-
-declare global {
-  namespace Cypress {
-    interface Chainable {
-      login(email: string, password: string): Chainable<void>;
-      signup(email: string, password: string): Chainable<void>;
-    }
-  }
-}
 
 // Custom command for login
 Cypress.Commands.add("login", (email: string, password: string) => {
