@@ -41,10 +41,15 @@ jobs:
       - name: Setup database
         working-directory: backend
         run: npx prisma generate
+        env:
+          DATABASE_URL: file:./prisma/test.db
 
       - name: Run backend tests
         working-directory: backend
         run: npm test
+        env:
+          DATABASE_URL: file:./prisma/test.db
+          JWT_SECRET: test-secret-key-for-ci
 
       - name: Upload backend coverage
         uses: actions/upload-artifact@v4
@@ -86,6 +91,8 @@ jobs:
       - name: Run frontend tests
         working-directory: frontend
         run: npm run test:coverage
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:4000
 
       - name: Upload frontend coverage
         uses: actions/upload-artifact@v4
@@ -96,6 +103,8 @@ jobs:
       - name: Build frontend
         working-directory: frontend
         run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:4000
 
   e2e-test:
     name: E2E Tests (Cypress)
@@ -124,6 +133,8 @@ jobs:
         run: |
           npx prisma generate
           npx prisma migrate deploy
+        env:
+          DATABASE_URL: file:./prisma/test.db
 
       - name: Start backend server
         working-directory: backend
@@ -131,7 +142,7 @@ jobs:
           npm run dev &
           npx wait-on http://localhost:4000 --timeout 60000
         env:
-          DATABASE_URL: file:./test.db
+          DATABASE_URL: file:./prisma/test.db
           JWT_SECRET: test-secret-key
           PORT: 4000
           DISABLE_MODEL_OVERLOAD: true
