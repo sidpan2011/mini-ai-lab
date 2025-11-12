@@ -2,7 +2,7 @@
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
     // File Layout
-    "rootDir": "./src",
+    "rootDir": ".",
     "outDir": "./dist",
 
     // Environment Settings
@@ -13,8 +13,8 @@
     // "types": [],
     // For nodejs:
     "lib": ["es2020"],
-    "types": ["node"],
-    // and npm install -D @types/node
+    "types": ["node", "jest"],
+    // and npm install -D @types/node @types/jest
 
     // Other Outputs
     "sourceMap": true,
@@ -41,5 +41,7 @@
     // "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
-  }
+  },
+  "include": ["src/**/*", "tests/**/*"],
+  "exclude": ["node_modules", "dist"]
 }
