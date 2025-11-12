@@ -44,8 +44,8 @@ describe("Authentication Flow", () => {
 
       cy.url().should("include", "/studio");
       cy.window().then((win) => {
-        expect(win.localStorage.getItem("token")).to.exist;
-        expect(win.localStorage.getItem("user")).to.exist;
+        void expect(win.localStorage.getItem("token")).to.exist;
+        return expect(win.localStorage.getItem("user")).to.exist;
       });
     });
   });
@@ -87,8 +87,8 @@ describe("Authentication Flow", () => {
       cy.url().should("include", "/login");
 
       cy.window().then((win) => {
-        expect(win.localStorage.getItem("token")).to.be.null;
-        expect(win.localStorage.getItem("user")).to.be.null;
+        void expect(win.localStorage.getItem("token")).to.be.null;
+        return expect(win.localStorage.getItem("user")).to.be.null;
       });
     });
   });
@@ -113,7 +113,7 @@ describe("Authentication Flow", () => {
       cy.reload();
       cy.url().should("include", "/studio");
       cy.window().then((win) => {
-        expect(win.localStorage.getItem("token")).to.exist;
+        return expect(win.localStorage.getItem("token")).to.exist;
       });
     });
   });
