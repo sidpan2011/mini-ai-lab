@@ -84,7 +84,7 @@ export default function StudioPage() {
     abortControllerRef.current = new AbortController();
 
     try {
-      await GenerationsApi.create(
+      const result = await GenerationsApi.create(
         {
           image: files[0].file,
           prompt: prompt.trim(),
@@ -95,6 +95,8 @@ export default function StudioPage() {
 
       // Success - reset retry count and reload history
       setRetryCount(0);
+      setIsGenerating(false);
+      setError(null);
       await loadHistory();
 
       // Clear form
@@ -104,26 +106,24 @@ export default function StudioPage() {
       if (err.name === "AbortError") {
         setError("Generation cancelled");
         setRetryCount(0);
+        setIsGenerating(false);
       } else if (err.message === "Model overloaded") {
         // Handle retry logic (up to 3 attempts total)
         if (retryCount < 2) {
           setError(`Model overloaded. Retrying... (${retryCount + 1}/3)`);
           setRetryCount(retryCount + 1);
-          // Auto-retry after 1 second
+          // Auto-retry after 1 second (keep isGenerating true)
           setTimeout(() => handleGenerate(), 1000);
-          return;
+          return; // Don't set isGenerating to false, we're retrying
         } else {
           setError("Model overloaded. Please try again later.");
           setRetryCount(0);
+          setIsGenerating(false);
         }
       } else {
         setError(err.message || "Generation failed");
         setRetryCount(0);
-      }
-    } finally {
-      if (abortControllerRef.current?.signal.aborted || retryCount >= 2) {
         setIsGenerating(false);
-        abortControllerRef.current = null;
       }
     }
   };
@@ -274,7 +274,7 @@ export default function StudioPage() {
                   <div
                     key={gen.id}
                     onClick={() => handleRestore(gen)}
-                    className="border rounded-lg p-3 cursor-pointer hover:bg-gray-50 transition"
+                    className="border rounded-lg p-3 cursor-pointer hover:bg-muted transition"
                   >
                     <img
                       src={gen.imageUrl}

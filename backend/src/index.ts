@@ -1,7 +1,9 @@
 import dotenv from "dotenv";
-import { createApp } from "./app";
 
+// IMPORTANT: Load environment variables BEFORE any other imports
 dotenv.config();
+
+import { createApp } from "./app";
 
 const app = createApp();
 const PORT = process.env.PORT || 3000;
