@@ -21,7 +21,7 @@ describe("Image Generation Flow", () => {
     });
 
     it("should show error when generating without image", () => {
-      cy.get('input#prompt').type("A beautiful sunset");
+      cy.get("input#prompt").type("A beautiful sunset");
       cy.findByRole("button", { name: /generate/i }).click();
       cy.contains(/please upload an image/i, { timeout: 3000 }).should(
         "be.visible"
@@ -61,10 +61,10 @@ describe("Image Generation Flow", () => {
 
       // fill prompt and select a style
       const prompt = "A futuristic city skyline at dusk";
-      cy.get('input#prompt').clear().type(prompt);
+      cy.get("input#prompt").clear().type(prompt);
 
       // Select style from dropdown
-      cy.get('select#style').select("Artistic");
+      cy.get("select#style").select("Artistic");
 
       // click generate and wait for stubbed response
       cy.findByRole("button", { name: /generate/i }).click();
@@ -94,10 +94,10 @@ describe("Image Generation Flow", () => {
 
       // fill prompt and select a style
       const prompt = "Real backend integration test";
-      cy.get('input#prompt').clear().type(prompt);
+      cy.get("input#prompt").clear().type(prompt);
 
       // Select style from dropdown
-      cy.get('select#style').select("Realistic");
+      cy.get("select#style").select("Realistic");
 
       // click generate and wait for REAL backend response
       cy.findByRole("button", { name: /generate/i }).click();
@@ -136,14 +136,14 @@ describe("Image Generation Flow", () => {
   describe("Prompt and Style Selection", () => {
     it("should allow entering prompt text", () => {
       const prompt = "A beautiful sunset over mountains";
-      cy.get('input#prompt').type(prompt);
-      cy.get('input#prompt').should("have.value", prompt);
+      cy.get("input#prompt").type(prompt);
+      cy.get("input#prompt").should("have.value", prompt);
     });
 
     it("should allow selecting different styles", () => {
       // Select from dropdown
-      cy.get('select#style').select("Artistic");
-      cy.get('select#style').should("have.value", "Artistic");
+      cy.get("select#style").select("Artistic");
+      cy.get("select#style").should("have.value", "Artistic");
     });
   });
 
@@ -160,7 +160,7 @@ describe("Image Generation Flow", () => {
   describe("Error Handling", () => {
     it("should show loading state during generation", () => {
       // Enter prompt without image
-      cy.get('input#prompt').type("Test prompt");
+      cy.get("input#prompt").type("Test prompt");
       cy.findByRole("button", { name: /generate/i }).click();
       // Will show error message instead
       cy.contains(/please upload an image/i).should("be.visible");
@@ -171,14 +171,14 @@ describe("Image Generation Flow", () => {
     it("should work on mobile viewport", () => {
       cy.viewport("iphone-x");
       cy.contains(/create generation/i).should("be.visible");
-      cy.get('input#prompt').should("be.visible");
+      cy.get("input#prompt").should("be.visible");
       cy.findByRole("button", { name: /generate/i }).should("be.visible");
     });
 
     it("should work on tablet viewport", () => {
       cy.viewport("ipad-2");
       cy.contains(/create generation/i).should("be.visible");
-      cy.get('input#prompt').should("be.visible");
+      cy.get("input#prompt").should("be.visible");
       cy.findByRole("button", { name: /generate/i }).should("be.visible");
     });
   });
