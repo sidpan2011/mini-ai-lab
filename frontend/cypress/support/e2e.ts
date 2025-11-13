@@ -2,12 +2,10 @@
 // This file is processed and loaded automatically before your test files.
 // ***********************************************************
 
+/// <reference types="./index.d.ts" />
+
 import "@testing-library/cypress/add-commands";
 import "cypress-file-upload";
-import "./index.d.ts";
-
-// Prevent TypeScript errors
-export {};
 
 // Custom command for login
 Cypress.Commands.add("login", (email: string, password: string) => {
