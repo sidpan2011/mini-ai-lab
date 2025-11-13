@@ -148,6 +148,7 @@ jobs:
           DATABASE_URL: file:./test.db
           JWT_SECRET: test-secret-key
           PORT: 4000
+          UPLOAD_DIR: ./uploads
           DISABLE_MODEL_OVERLOAD: true
 
       - name: Start frontend server
